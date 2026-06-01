@@ -3,13 +3,14 @@ import fg from "fast-glob";
 import { minimatch } from "minimatch";
 import { CODEOWNERS_LOCATIONS } from "./types.js";
 import type { Config } from "./types.js";
-import { listGitFiles, isGitRepo } from "./git/files.js";
+import { gitRoot, listGitFiles } from "./git/files.js";
 import { pathExists } from "./utils/fs.js";
 import { toPosixPath } from "./utils/path.js";
 
 export async function discoverFiles(repoPath: string, config: Config): Promise<string[]> {
-  const gitRepo = await isGitRepo(repoPath);
-  const files = gitRepo
+  const root = await gitRoot(repoPath);
+  const useGitFiles = root === path.resolve(repoPath);
+  const files = useGitFiles
     ? await listGitFiles(repoPath)
     : await fg(config.include, {
         cwd: repoPath,

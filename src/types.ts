@@ -130,6 +130,12 @@ export interface Suggestion {
   reason: string;
 }
 
+export interface CoverageBadge {
+  markdown: string;
+  label: string;
+  color: "brightgreen" | "green" | "yellow" | "orange" | "red";
+}
+
 export interface AnalysisResult {
   repoPath: string;
   codeowners: CodeownersLocation;
@@ -140,6 +146,7 @@ export interface AnalysisResult {
   owners: OwnerSummary[];
   findings: Finding[];
   suggestions: Suggestion[];
+  badge?: CoverageBadge;
   status: ReportStatus;
   warnings: string[];
 }

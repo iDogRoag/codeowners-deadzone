@@ -15,6 +15,7 @@ export function jsonReport(result: AnalysisResult): string {
       files: result.files,
       findings: result.findings,
       suggestions: result.suggestions,
+      badge: result.badge,
       warnings: result.warnings
     },
     null,

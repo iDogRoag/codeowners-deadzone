@@ -10,6 +10,7 @@ export * from "./codeowners/suggestions.js";
 export * from "./git/diff.js";
 export * from "./git/files.js";
 export * from "./reports/summary.js";
+export * from "./reports/badge.js";
 export * from "./reporters/json.js";
 export * from "./reporters/markdown.js";
 export * from "./reporters/html.js";

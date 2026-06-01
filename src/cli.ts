@@ -13,6 +13,7 @@ import { markdownReport } from "./reporters/markdown.js";
 import { htmlReport } from "./reporters/html.js";
 import { tableReport } from "./reporters/table.js";
 import { sarifReport } from "./reporters/sarif.js";
+import { makeCoverageBadge } from "./reports/badge.js";
 import { makeBaseline, newFindings, shouldFailOnNew } from "./reports/summary.js";
 import type {
   AnalysisResult,
@@ -40,6 +41,7 @@ interface GlobalOptions {
   writeBaseline?: string;
   base?: string;
   head?: string;
+  badge?: boolean;
   ci?: boolean;
   quiet?: boolean;
   strict?: boolean;
@@ -79,6 +81,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
     .addOption(new Option("--fail-on-new <policy>", "fail only on new findings").choices(["high", "medium", "unowned", "dead-zones"]))
     .option("--base <ref>", "base ref for changed mode")
     .option("--head <ref>", "head ref for changed mode", "HEAD")
+    .option("--badge", "print coverage badge Markdown or include badge data in reports")
     .option("--ci", "machine-friendly mode")
     .option("--quiet", "only print final result and errors")
     .option("--strict", "treat low-severity findings as warning status")
@@ -100,6 +103,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
         const config = await readMergedConfig(repoPath, options);
         const result = await analyzeRepository({ repoPath, config });
         await applyBaselineOptions(result, options, io);
+        applyBadgeOptions(result, options);
         applyStatusOptions(result, options);
         return await emitResult(result, options, io);
       });
@@ -123,6 +127,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
           throw Object.assign(new Error(`Unable to analyze file: ${filePath}`), { exitCode: 2 });
         }
         await applyBaselineOptions(result, options, io);
+        applyBadgeOptions(result, options);
         applyStatusOptions(result, options);
         const output =
           options.format === "json"
@@ -163,6 +168,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
           });
           result.warnings.push(...warnings);
           await applyBaselineOptions(result, options, io);
+          applyBadgeOptions(result, options);
           applyStatusOptions(result, options);
           return await emitResult(result, options, io);
         },
@@ -192,6 +198,23 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
       commandExitCode = code;
     });
 
+  program
+    .command("demo")
+    .description("Scan a bundled example repo with meaningful CODEOWNERS dead zones.")
+    .action(async () => {
+      const code = await commandErrorBoundary(io, async () => {
+        const repoPath = resolveBundledExamplePath("dead-zones");
+        const options = program.opts<GlobalOptions>();
+        const config = await readMergedConfig(repoPath, options);
+        const result = await analyzeRepository({ repoPath, config });
+        await applyBaselineOptions(result, options, io);
+        applyBadgeOptions(result, options);
+        applyStatusOptions(result, options);
+        return await emitResult(result, options, io);
+      });
+      commandExitCode = code;
+    });
+
   program.addHelpText(
     "after",
     `
@@ -199,6 +222,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
 Examples:
   codz scan .
   codz scan --format markdown --output codeowners-deadzone-report.md
+  codz demo --badge
   codz changed --base origin/main --head HEAD --fail-on-new high
   codz explain src/app.ts --format markdown
 `
@@ -234,6 +258,17 @@ function applyStatusOptions(result: AnalysisResult, options: GlobalOptions): voi
   if (options.strict && result.status === "pass" && result.findings.length > 0) {
     result.status = "warn";
   }
+}
+
+function applyBadgeOptions(result: AnalysisResult, options: GlobalOptions): void {
+  if (options.badge) {
+    result.badge = makeCoverageBadge(result);
+  }
+}
+
+function resolveBundledExamplePath(name: string): string {
+  const currentDir = path.dirname(fileURLToPath(import.meta.url));
+  return path.resolve(currentDir, "..", "examples", name);
 }
 
 async function codeownersFromBaseRef(

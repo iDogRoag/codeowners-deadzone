@@ -39,6 +39,8 @@ th,td{border:1px solid #d7dde5;padding:.5rem;text-align:left;vertical-align:top}
 th{background:#f4f6f8}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem}
 .card{border:1px solid #d7dde5;border-radius:8px;padding:1rem}
+.badge{display:inline-block;border-radius:6px;color:#fff;background:#687078;padding:.35rem .55rem;font-weight:700}
+.badge.brightgreen{background:#2ea44f}.badge.green{background:#22863a}.badge.yellow{background:#b08800}.badge.orange{background:#e36209}.badge.red{background:#cb2431}
 .muted{color:#5b6573}
 </style>
 </head>
@@ -50,6 +52,7 @@ th{background:#f4f6f8}
 <div class="card"><strong>Coverage</strong><br>${formatPercent(result.summary.coveragePercent)}</div>
 <div class="card"><strong>Weighted</strong><br>${formatPercent(result.summary.weightedCoveragePercent)}</div>
 </div>
+${result.badge ? `<p><span class="badge ${escapeHtml(result.badge.color)}">${escapeHtml(result.badge.label)}</span></p>` : ""}
 <h2>Findings</h2>
 <table><thead><tr><th>Severity</th><th>Evidence</th><th>Finding</th><th>Location</th><th>Suggestion</th></tr></thead><tbody>
 ${findingRows || "<tr><td colspan=\"5\">No meaningful findings.</td></tr>"}

@@ -14,6 +14,10 @@ export function markdownReport(result: AnalysisResult): string {
   lines.push(`| Weighted coverage | ${formatPercent(result.summary.weightedCoveragePercent)} |`);
   lines.push(`| Findings | ${result.findings.length} |`);
   lines.push("");
+  if (result.badge) {
+    lines.push(result.badge.markdown);
+    lines.push("");
+  }
 
   if (result.codeowners.ignoredPaths.length > 0) {
     lines.push("## Ignored CODEOWNERS Files");

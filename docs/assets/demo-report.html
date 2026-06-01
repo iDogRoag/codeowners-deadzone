@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CODEOWNERS Dead Zone Report</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:2rem;line-height:1.5;color:#17202a;background:#fff}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid #d7dde5;padding:.5rem;text-align:left;vertical-align:top}
+th{background:#f4f6f8}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem}
+.card{border:1px solid #d7dde5;border-radius:8px;padding:1rem}
+.badge{display:inline-block;border-radius:6px;color:#fff;background:#687078;padding:.35rem .55rem;font-weight:700}
+.badge.brightgreen{background:#2ea44f}.badge.green{background:#22863a}.badge.yellow{background:#b08800}.badge.orange{background:#e36209}.badge.red{background:#cb2431}
+.muted{color:#5b6573}
+</style>
+</head>
+<body>
+<h1>CODEOWNERS Dead Zone Report</h1>
+<div class="cards">
+<div class="card"><strong>Status</strong><br>warn</div>
+<div class="card"><strong>Files</strong><br>12</div>
+<div class="card"><strong>Coverage</strong><br>58.3%</div>
+<div class="card"><strong>Weighted</strong><br>51.4%</div>
+</div>
+
+<h2>Findings</h2>
+<table><thead><tr><th>Severity</th><th>Evidence</th><th>Finding</th><th>Location</th><th>Suggestion</th></tr></thead><tbody>
+<tr>
+<td>high</td>
+<td>confirmed</td>
+<td>CODEOWNERS file itself is unowned</td>
+<td>.github/CODEOWNERS</td>
+<td>Add a trusted owner for the active CODEOWNERS file.</td>
+</tr>
+<tr>
+<td>high</td>
+<td>confirmed</td>
+<td>Ownerless rule clears important path</td>
+<td>.github/CODEOWNERS</td>
+<td>Confirm the clear is intentional or add owners to the final matching rule.</td>
+</tr>
+<tr>
+<td>high</td>
+<td>confirmed</td>
+<td>Ownerless rule clears important path</td>
+<td>.github/workflows/ci.yml</td>
+<td>Confirm the clear is intentional or add owners to the final matching rule.</td>
+</tr>
+<tr>
+<td>high</td>
+<td>confirmed</td>
+<td>Ownerless rule clears important path</td>
+<td>.github/workflows/release.yml</td>
+<td>Confirm the clear is intentional or add owners to the final matching rule.</td>
+</tr>
+<tr>
+<td>high</td>
+<td>confirmed</td>
+<td>Ownerless rule clears important path</td>
+<td>apps/billing/index.ts</td>
+<td>Confirm the clear is intentional or add owners to the final matching rule.</td>
+</tr>
+<tr>
+<td>high</td>
+<td>confirmed</td>
+<td>Ownerless rule clears important path</td>
+<td>apps/billing/payments.ts</td>
+<td>Confirm the clear is intentional or add owners to the final matching rule.</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>confirmed</td>
+<td>Ignored CODEOWNERS file</td>
+<td>CODEOWNERS</td>
+<td>Delete the ignored file or merge its rules into the active CODEOWNERS file.</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>confirmed</td>
+<td>Ignored CODEOWNERS file</td>
+<td>docs/CODEOWNERS</td>
+<td>Delete the ignored file or merge its rules into the active CODEOWNERS file.</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>confirmed</td>
+<td>Invalid CODEOWNERS line skipped</td>
+<td>.github/CODEOWNERS</td>
+<td>Fix the syntax so GitHub can apply the intended rule.</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>confirmed</td>
+<td>Invalid CODEOWNERS line skipped</td>
+<td>.github/CODEOWNERS</td>
+<td>Fix the syntax so GitHub can apply the intended rule.</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>confirmed</td>
+<td>Coverage below configured minimum</td>
+<td></td>
+<td>Add or repair CODEOWNERS rules for unowned areas.</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>heuristic</td>
+<td>Ownership is concentrated</td>
+<td></td>
+<td>Split ownership across more specific teams where appropriate.</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>confirmed</td>
+<td>Rule is fully shadowed</td>
+<td>line 5</td>
+<td>Remove the rule or move it below the rules that should not override it.</td>
+</tr>
+<tr>
+<td>low</td>
+<td>unverified-offline</td>
+<td>No trusted owner configured</td>
+<td></td>
+<td>Configure trustedOwners for stricter governance checks.</td>
+</tr>
+<tr>
+<td>low</td>
+<td>heuristic</td>
+<td>Broad fallback owns files</td>
+<td></td>
+<td>Confirm this is intentional and add specific rules for important areas.</td>
+</tr>
+</tbody></table>
+<h2>Top Owners</h2>
+<table><thead><tr><th>Owner</th><th>Files</th><th>Important Files</th><th>Percent</th></tr></thead><tbody>
+<tr>
+<td>@example/global-reviewers</td>
+<td>6</td>
+<td>4</td>
+<td>85.7%</td>
+</tr>
+<tr>
+<td>@example/web</td>
+<td>1</td>
+<td>1</td>
+<td>14.3%</td>
+</tr>
+</tbody></table>
+<p class="muted">Static offline analysis. Owner existence, team visibility, write access, and branch protection are not verified.</p>
+</body>
+</html>

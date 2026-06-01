@@ -1,7 +1,7 @@
 {
   "name": "codeowners-deadzone",
   "version": "0.1.0",
-  "description": "Find weak, missing, or misleading CODEOWNERS coverage in a repository.",
+  "description": "Find unowned files, shadowed rules, and risky gaps in GitHub CODEOWNERS coverage.",
   "type": "module",
   "license": "MIT",
   "author": "iDogRoag",
@@ -33,7 +33,9 @@
     "devtools",
     "oss",
     "repository",
-    "static-analysis"
+    "static-analysis",
+    "developer-tools",
+    "monorepo"
   ],
   "engines": {
     "node": ">=22"
@@ -46,6 +48,9 @@
     "dist",
     "README.md",
     "LICENSE",
+    "CHANGELOG.md",
+    "examples",
+    "docs/assets",
     "package.json"
   ],
   "scripts": {

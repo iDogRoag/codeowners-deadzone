@@ -1,0 +1,16 @@
+# Broad fallback: useful, but it can hide missing specific ownership.
+* @example/global-reviewers
+
+# Fully shadowed by the later apps/web rule.
+apps/web/** @example/web-old
+
+apps/web/** @example/web
+
+# Explicit ownerless clears for important paths.
+.github/workflows/
+apps/billing/
+.github/CODEOWNERS
+
+# Unsupported GitHub CODEOWNERS syntax.
+!infra/secrets/** @example/security
+apps/[abc]/** @example/invalid

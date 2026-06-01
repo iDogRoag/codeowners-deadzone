@@ -1,0 +1,45 @@
+CODEOWNERS Dead Zone Finder warn
+Coverage: 58.3%
+Weighted coverage: 51.4%
+Files scanned: 12
+Unowned files: 0
+Explicitly unowned files: 5
+Invalid lines: 2
+Shadowed rules: 1
+Findings: 6 high, 7 medium, 2 low
+
+Repo: /Users/idog/web projects/codeowners-deadzone/examples/dead-zones
+Active CODEOWNERS: .github/CODEOWNERS
+Ignored CODEOWNERS: CODEOWNERS, docs/CODEOWNERS
+
+Top dead zones
+- [high/confirmed] CODEOWNERS file itself is unowned
+  .github/CODEOWNERS
+  Add a trusted owner for the active CODEOWNERS file.
+- [high/confirmed] Ownerless rule clears important path
+  .github/CODEOWNERS
+  Confirm the clear is intentional or add owners to the final matching rule.
+- [high/confirmed] Ownerless rule clears important path
+  .github/workflows/ci.yml
+  Confirm the clear is intentional or add owners to the final matching rule.
+- [high/confirmed] Ownerless rule clears important path
+  .github/workflows/release.yml
+  Confirm the clear is intentional or add owners to the final matching rule.
+- [high/confirmed] Ownerless rule clears important path
+  apps/billing/index.ts
+  Confirm the clear is intentional or add owners to the final matching rule.
+
+Showing top 5 findings.
+Use --format markdown, --show-files, or --show-rules for details.
+
+Top owners
+- @example/global-reviewers: 6 files (85.7%)
+- @example/web: 1 files (14.3%)
+
+Suggested CODEOWNERS additions
+/.github/workflows/ @TODO-owner
+/apps/billing/ @TODO-owner
+/.github/ @TODO-owner
+Review suggestions before committing.
+
+Static offline analysis: owner existence, write access, and branch protection are not verified.

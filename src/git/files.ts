@@ -16,6 +16,15 @@ export async function isGitRepo(repoPath: string): Promise<boolean> {
   }
 }
 
+export async function gitRoot(repoPath: string): Promise<string | undefined> {
+  try {
+    const { stdout } = await execFileAsync("git", ["rev-parse", "--show-toplevel"], { cwd: repoPath });
+    return path.resolve(stdout.trim());
+  } catch {
+    return undefined;
+  }
+}
+
 export async function listGitFiles(repoPath: string): Promise<string[]> {
   const { stdout } = await execFileAsync("git", ["ls-files"], { cwd: repoPath, maxBuffer: 1024 * 1024 * 50 });
   const files = stdout
