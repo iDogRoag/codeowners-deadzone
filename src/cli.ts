@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { Command } from "commander";
+import { Command, InvalidArgumentError, Option } from "commander";
 import { pathExists, readUtf8, writeUtf8 } from "./utils/fs.js";
 import { analyzeRepository } from "./codeowners/analyzer.js";
 import { findActiveCodeownersFromGitRef } from "./codeowners/locations.js";
@@ -19,8 +19,7 @@ import type {
   Config,
   FailOnNewPolicy,
   FailOnPolicy,
-  ParsedCodeownersFile,
-  ReportStatus
+  ParsedCodeownersFile
 } from "./types.js";
 
 type Format = "table" | "json" | "markdown" | "html" | "sarif";
@@ -33,8 +32,8 @@ interface GlobalOptions {
   exclude?: string[];
   showFiles?: boolean;
   showRules?: boolean;
-  maxFiles?: string;
-  minCoverage?: string;
+  maxFiles?: number;
+  minCoverage?: number;
   failOn?: FailOnPolicy;
   failOnNew?: FailOnNewPolicy;
   baseline?: string;
@@ -43,6 +42,7 @@ interface GlobalOptions {
   head?: string;
   ci?: boolean;
   quiet?: boolean;
+  strict?: boolean;
   verbose?: boolean;
   force?: boolean;
 }
@@ -64,23 +64,24 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
   program
     .name("codeowners-deadzone")
     .description("Find weak, missing, or misleading CODEOWNERS ownership coverage.")
-    .option("--format <format>", "table, json, markdown, html, or sarif", "table")
+    .addOption(new Option("--format <format>", "report format").choices(["table", "json", "markdown", "html", "sarif"]).default("table"))
     .option("--output <file>", "write report to file")
     .option("--config <file>", "use config file")
     .option("--include <glob>", "include files matching glob", collect, [])
     .option("--exclude <glob>", "exclude files matching glob", collect, [])
     .option("--show-files", "show file-level ownership details")
     .option("--show-rules", "show parsed CODEOWNERS rules and match counts")
-    .option("--max-files <number>", "safety limit for huge repos", "200000")
-    .option("--min-coverage <percent>", "minimum acceptable ownership coverage")
-    .option("--fail-on <policy>", "none, high, medium, dead-zones, unowned, or coverage-below")
+    .option("--max-files <number>", "safety limit for huge repos", parsePositiveInteger, 200000)
+    .option("--min-coverage <percent>", "minimum acceptable ownership coverage", parsePercent)
+    .addOption(new Option("--fail-on <policy>", "fail policy").choices(["none", "high", "medium", "dead-zones", "unowned", "coverage-below"]))
     .option("--baseline <file>", "compare findings against a baseline file")
     .option("--write-baseline <file>", "write current findings as a baseline file")
-    .option("--fail-on-new <policy>", "fail only on new high, medium, unowned, or dead-zones findings")
+    .addOption(new Option("--fail-on-new <policy>", "fail only on new findings").choices(["high", "medium", "unowned", "dead-zones"]))
     .option("--base <ref>", "base ref for changed mode")
     .option("--head <ref>", "head ref for changed mode", "HEAD")
     .option("--ci", "machine-friendly mode")
     .option("--quiet", "only print final result and errors")
+    .option("--strict", "treat low-severity findings as warning status")
     .option("--verbose", "print extra debug info");
   program.configureOutput({
     writeOut: io.stdout,
@@ -99,6 +100,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
         const config = await readMergedConfig(repoPath, options);
         const result = await analyzeRepository({ repoPath, config });
         await applyBaselineOptions(result, options, io);
+        applyStatusOptions(result, options);
         return await emitResult(result, options, io);
       });
       commandExitCode = code;
@@ -121,6 +123,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
           throw Object.assign(new Error(`Unable to analyze file: ${filePath}`), { exitCode: 2 });
         }
         await applyBaselineOptions(result, options, io);
+        applyStatusOptions(result, options);
         const output =
           options.format === "json"
             ? `${JSON.stringify({ schemaVersion: 1, file, codeowners: result.codeowners, suggestions: result.suggestions }, null, 2)}\n`
@@ -160,6 +163,7 @@ export async function run(argv = process.argv, io: Io = DEFAULT_IO): Promise<num
           });
           result.warnings.push(...warnings);
           await applyBaselineOptions(result, options, io);
+          applyStatusOptions(result, options);
           return await emitResult(result, options, io);
         },
         3
@@ -207,7 +211,7 @@ Examples:
       return 0;
     }
     if (isCommanderExit(error)) {
-      return error.exitCode;
+      return 2;
     }
     throw error;
   }
@@ -224,6 +228,12 @@ async function readMergedConfig(repoPath: string, options: GlobalOptions): Promi
     base: options.base,
     head: options.head
   });
+}
+
+function applyStatusOptions(result: AnalysisResult, options: GlobalOptions): void {
+  if (options.strict && result.status === "pass" && result.findings.length > 0) {
+    result.status = "warn";
+  }
 }
 
 async function codeownersFromBaseRef(
@@ -268,7 +278,7 @@ async function applyBaselineOptions(result: AnalysisResult, options: GlobalOptio
 }
 
 async function emitResult(result: AnalysisResult, options: GlobalOptions, io: Io): Promise<number> {
-  const maxFiles = Number(options.maxFiles ?? 200000);
+  const maxFiles = options.maxFiles ?? 200000;
   if (result.summary.totalFiles > maxFiles) {
     throw Object.assign(new Error(`Repo exceeded safety limit: ${result.summary.totalFiles} files > ${maxFiles}`), {
       exitCode: 4
@@ -329,6 +339,22 @@ async function commandErrorBoundary(io: Io, fn: () => Promise<number>, defaultEx
 function collect(value: string, previous: string[]): string[] {
   previous.push(value);
   return previous;
+}
+
+function parsePositiveInteger(value: string): number {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1) {
+    throw new InvalidArgumentError("must be a positive integer");
+  }
+  return parsed;
+}
+
+function parsePercent(value: string): number {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0 || parsed > 100) {
+    throw new InvalidArgumentError("must be a number from 0 to 100");
+  }
+  return parsed;
 }
 
 function explainTable(result: AnalysisResult): string {

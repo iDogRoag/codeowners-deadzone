@@ -15,6 +15,13 @@ describe("CODEOWNERS pattern matching", () => {
     expect(matchCodeownersPattern("**/logs/", "services/api/logs/today.txt")).toBe(true);
     expect(matchCodeownersPattern("/build/logs/", "build/logs/today.txt")).toBe(true);
     expect(matchCodeownersPattern("/build/logs/", "tmp/build/logs/today.txt")).toBe(false);
+    expect(matchCodeownersPattern("build/logs/", "build/logs/today.txt")).toBe(true);
+    expect(matchCodeownersPattern("build/logs/", "tmp/build/logs/today.txt")).toBe(false);
+  });
+
+  it("supports escaped spaces in patterns", () => {
+    expect(matchCodeownersPattern("docs/My Guide.md", "docs/My Guide.md")).toBe(true);
+    expect(matchCodeownersPattern("docs/My Guide.md", "docs/My Other Guide.md")).toBe(false);
   });
 
   it("is case sensitive", () => {

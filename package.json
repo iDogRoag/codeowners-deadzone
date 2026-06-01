@@ -4,7 +4,17 @@
   "description": "Find weak, missing, or misleading CODEOWNERS coverage in a repository.",
   "type": "module",
   "license": "MIT",
-  "author": "",
+  "author": "iDogRoag",
+  "packageManager": "npm@10.9.2",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iDogRoag/codeowners-deadzone.git"
@@ -44,7 +54,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit",
+    "lint": "eslint .",
     "format": "prettier --check .",
     "prepack": "npm run build"
   },
@@ -57,11 +67,14 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
+    "@eslint/js": "^9.39.4",
+    "@types/node": "^22.19.19",
+    "eslint": "^9.39.4",
     "prettier": "^3.6.2",
     "tsup": "^8.5.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.60.1",
     "vitest": "^4.0.14"
   }
 }

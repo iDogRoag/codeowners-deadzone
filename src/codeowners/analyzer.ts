@@ -439,14 +439,20 @@ function computeStatus(findings: Finding[], summary: { coveragePercent: number }
         ? true
         : failOn.has("dead-zones") && hasDeadZones
           ? true
-          : failOn.has("unowned") && findings.some((finding) => finding.id.startsWith("coverage.unowned"))
+          : failOn.has("unowned") &&
+              findings.some(
+                (finding) =>
+                  finding.id.startsWith("coverage.unowned") ||
+                  finding.id.includes("ownerless") ||
+                  finding.id.includes("explicitly-unowned")
+              )
             ? true
             : failOn.has("coverage-below") && summary.coveragePercent < config.minCoverage;
 
   if (fails) {
     return "fail";
   }
-  return findings.length > 0 ? "warn" : "pass";
+  return hasMedium ? "warn" : "pass";
 }
 
 function bySeverityThenId(a: Finding, b: Finding): number {

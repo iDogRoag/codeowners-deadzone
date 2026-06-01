@@ -38,3 +38,11 @@ Changed mode reads CODEOWNERS from the base ref when available, matching pull re
 codz scan --write-baseline codeowners-deadzone-baseline.json
 codz scan --baseline codeowners-deadzone-baseline.json --fail-on-new high
 ```
+
+## Strict Status
+
+```sh
+codz scan --strict
+```
+
+By default, low-severity or offline-unverified findings do not change a result from `pass` to `warn`. `--strict` makes any finding produce warning status unless a selected fail policy turns it into `fail`.

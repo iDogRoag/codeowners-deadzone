@@ -12,6 +12,18 @@ describe("analyzer", () => {
     expect(result.summary.explicitlyUnownedFiles).toBeGreaterThan(0);
   });
 
+  it("fails unowned policy for explicit ownerless clears", async () => {
+    const config = { ...defaultConfig(), failOn: ["unowned" as const] };
+    const result = await analyzeRepository({ repoPath: path.join(fixtures, "ownerless"), config });
+    expect(result.status).toBe("fail");
+  });
+
+  it("passes by default when only low findings remain", async () => {
+    const result = await analyzeRepository({ repoPath: path.join(fixtures, "basic"), config: defaultConfig() });
+    expect(result.findings.every((finding) => finding.severity === "low")).toBe(true);
+    expect(result.status).toBe("pass");
+  });
+
   it("detects coverage and important unowned findings", async () => {
     const result = await analyzeRepository({ repoPath: path.join(fixtures, "case-sensitive"), config: defaultConfig() });
     expect(result.files.find((file) => file.path === "docs/readme.md")?.status).toBe("unowned");

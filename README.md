@@ -4,7 +4,7 @@
 
 It answers one practical question:
 
-> Which files in this repo are not really covered by the active CODEOWNERS file?
+> Find CODEOWNERS blind spots before they reach your pull requests.
 
 The CLI works offline by default. It does not call AI services, GitHub APIs, telemetry endpoints, or any network service unless a future explicit online mode is added.
 
@@ -37,6 +37,7 @@ codz scan --fail-on high
 codz scan --fail-on coverage-below --min-coverage 95
 codz scan --write-baseline codeowners-deadzone-baseline.json
 codz scan --baseline codeowners-deadzone-baseline.json --fail-on-new high
+codz scan --strict
 codz explain src/app.ts
 codz changed --base origin/main --head HEAD --format markdown
 codz init
@@ -70,6 +71,8 @@ Offline-unverified findings include:
 - whether branch protection or rulesets require CODEOWNERS review
 
 This tool reports CODEOWNERS ownership coverage. It does not claim that files are protected from merge unless repository protection settings are verified separately.
+
+By default, low-severity or offline-unverified findings do not change a run from `pass` to `warn`. Use `--strict` if you want any finding to produce warning status.
 
 ## GitHub CODEOWNERS Semantics
 
@@ -136,10 +139,14 @@ SARIF output is suitable for GitHub code scanning upload workflows.
 
 ## Development
 
+Use Node 24 LTS for local development. The package supports Node 22 and newer at runtime so teams on the previous LTS line can still adopt it.
+
 ```sh
+nvm use
 npm install
 npm test
 npm run typecheck
+npm run lint
 npm run build
 ```
 

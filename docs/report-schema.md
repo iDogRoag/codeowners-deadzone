@@ -22,3 +22,5 @@ Findings include:
 - `category`: `coverage`, `rules`, `codeowners`, `ownership`, `syntax`, or `config`
 
 SARIF reports follow SARIF 2.1.0 and map high severity to `error`, medium to `warning`, and low to `note`.
+
+By default, low-severity and offline-unverified findings can appear while the overall status remains `pass`. Use `--strict` to make any finding produce `warn` status.

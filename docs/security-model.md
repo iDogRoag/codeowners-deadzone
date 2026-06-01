@@ -25,4 +25,4 @@ Static limits:
 - owner write access is not verified
 - branch protection and rulesets are not verified
 
-Reports should describe CODEOWNERS ownership coverage, not guaranteed merge protection.
+Reports should describe CODEOWNERS ownership coverage, not guaranteed merge protection. A file can have a CODEOWNERS owner without being protected by required code-owner review settings.
