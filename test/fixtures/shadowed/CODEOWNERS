@@ -1,0 +1,4 @@
+* @global
+src/** @src-team
+src/special/** @special-team
+src/** @later-team

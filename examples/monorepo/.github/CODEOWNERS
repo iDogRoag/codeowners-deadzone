@@ -1,0 +1,4 @@
+* @global-owner
+apps/web/ @web-team
+apps/api/ @api-team
+packages/ui/ @design-system-team

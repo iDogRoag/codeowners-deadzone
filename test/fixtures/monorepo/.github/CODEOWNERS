@@ -1,0 +1,4 @@
+* @global
+apps/web/ @web-team
+apps/api/ @api-team
+packages/ui/ @ui-team

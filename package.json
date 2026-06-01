@@ -1,0 +1,67 @@
+{
+  "name": "codeowners-deadzone",
+  "version": "0.1.0",
+  "description": "Find weak, missing, or misleading CODEOWNERS coverage in a repository.",
+  "type": "module",
+  "license": "MIT",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iDogRoag/codeowners-deadzone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iDogRoag/codeowners-deadzone/issues"
+  },
+  "homepage": "https://github.com/iDogRoag/codeowners-deadzone#readme",
+  "keywords": [
+    "codeowners",
+    "github",
+    "github-actions",
+    "ownership",
+    "code-review",
+    "security",
+    "devtools",
+    "oss",
+    "repository",
+    "static-analysis"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "codeowners-deadzone": "./dist/cli.js",
+    "codz": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "format": "prettier --check .",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^14.0.2",
+    "fast-glob": "^3.3.3",
+    "minimatch": "^10.0.3",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.8.1",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  }
+}

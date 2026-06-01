@@ -1,0 +1,5 @@
+* @global
+!secret/** @security
+src/[abc].ts @bad
+src/** not-an-owner
+\#literal @docs
