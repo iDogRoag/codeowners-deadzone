@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Fix npm binary startup when `codeowners-deadzone` or `codz` is executed through npm's symlinked `bin` entries.
+
 ## 0.1.0
 
 - Initial OSS version.

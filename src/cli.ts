@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { realpathSync } from "node:fs";
 import path from "node:path";
 import { Command, InvalidArgumentError, Option } from "commander";
 import { pathExists, readUtf8, writeUtf8 } from "./utils/fs.js";
@@ -483,7 +484,21 @@ function isCommanderExit(error: unknown): error is { exitCode: number } {
   return Boolean(error && typeof error === "object" && "exitCode" in error && typeof error.exitCode === "number");
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+function isCliEntrypoint(): boolean {
+  if (!process.argv[1]) {
+    return false;
+  }
+
+  const modulePath = fileURLToPath(import.meta.url);
+  const argvPath = path.resolve(process.argv[1]);
+  try {
+    return realpathSync(modulePath) === realpathSync(argvPath);
+  } catch {
+    return modulePath === argvPath;
+  }
+}
+
+if (isCliEntrypoint()) {
   void run().then((code) => {
     process.exitCode = code;
   });

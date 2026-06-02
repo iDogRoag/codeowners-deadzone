@@ -1,6 +1,6 @@
 {
   "name": "codeowners-deadzone",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Find unowned files, shadowed rules, and risky gaps in GitHub CODEOWNERS coverage.",
   "type": "module",
   "license": "MIT",
@@ -41,8 +41,8 @@
     "node": ">=22"
   },
   "bin": {
-    "codeowners-deadzone": "./dist/cli.js",
-    "codz": "./dist/cli.js"
+    "codeowners-deadzone": "dist/cli.js",
+    "codz": "dist/cli.js"
   },
   "files": [
     "dist",
