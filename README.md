@@ -46,14 +46,11 @@ HTML demo:
 npx codeowners-deadzone demo --format html --output codeowners-deadzone-demo.html
 ```
 
-Terminal GIF coming soon.
-Run `npx codeowners-deadzone demo` to see the same output locally.
+Preview the demo output:
 
-Demo assets:
-
-- [Terminal output](docs/assets/demo-output.txt)
-- [Markdown report](docs/assets/demo-output.md)
-- [HTML report](docs/assets/demo-report.html)
+- Terminal output: [docs/assets/demo-output.txt](docs/assets/demo-output.txt)
+- Markdown report: [docs/assets/demo-output.md](docs/assets/demo-output.md)
+- HTML report: [docs/assets/demo-report.html](docs/assets/demo-report.html)
 
 ## What is CODEOWNERS Dead Zone Finder
 
