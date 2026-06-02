@@ -5,6 +5,8 @@ Find the files and folders your CODEOWNERS rules do not actually protect.
 CODEOWNERS Dead Zone Finder scans your repo using GitHub-like last-match-wins behavior and shows unowned files, ownerless rules, shadowed patterns, invalid lines, ignored CODEOWNERS files, and ownership concentration.
 It helps teams see where review ownership silently falls through the cracks.
 
+![CODEOWNERS Dead Zone Finder demo screenshot](docs/assets/demo.png)
+
 ```sh
 npx codeowners-deadzone scan .
 ```
