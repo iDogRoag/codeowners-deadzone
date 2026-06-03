@@ -7,6 +7,9 @@ describe("launch readiness docs", () => {
 
     expect(readme).toContain("npx codeowners-deadzone scan .");
     expect(readme).toContain("npx codeowners-deadzone demo");
+    expect(readme).toContain("npx codeowners-deadzone demo --format html --output codeowners-deadzone-demo.html");
+    expect(readme).not.toContain("Terminal GIF coming soon");
+    expect(readme).toContain("Preview the demo output");
     expect(readme).toContain("static offline CODEOWNERS coverage analyzer");
     expect(readme).toContain("does not call the GitHub API by default");
     expect(readme).toContain("Owner existence, team visibility, write access");
